@@ -2,6 +2,7 @@
 #define NODEMATRIXBE_H
 
 #include "BE_Node.h"
+#include "VALUES.h"
 
 #include <stack>
 #include <cstdlib>
@@ -17,8 +18,11 @@ class BE_NodeMatrix {
         char generateRandomDirection();
         
     public:
-        BE_NodeMatrix(int r, int c);
+        BE_NodeMatrix();
         ~BE_NodeMatrix();
+        void initializeNodeMatrix();
+        void printNodeMatrix();
+        
 };
 
 #endif
