@@ -25,6 +25,9 @@ class BE_Node {
         ~BE_Node();
         void fillMatrix();
         void printMatrix();
+        int getNodeID();
+        bool checkVisited();
+        void setVisited();
         void movePlayer(char direction);
 };
 

@@ -4,10 +4,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include "VALUES.h"
 #include <string>
 #include <vector>
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
 using namespace std;
 
 class UI_MAIN {

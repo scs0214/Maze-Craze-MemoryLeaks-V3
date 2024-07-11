@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-const int CELL_SIZE = 100;
-#define BORDER_WIDTH 2
+#include "VALUES.h"
+
 using namespace std;
 
 class UI_Cell {
