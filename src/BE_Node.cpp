@@ -37,6 +37,87 @@ int BE_Node::getNodeID() {
     return ID;
 }
 
+BE_Node* BE_Node::getUp() {
+    return up;
+}
+
+BE_Node* BE_Node::getDown() {
+    return down;
+}
+
+BE_Node* BE_Node::getLeft() {
+    return left;
+}
+
+BE_Node* BE_Node::getRight() {
+    return right;
+}
+
+void BE_Node::setUp(BE_Node* neighbor) {
+    up = neighbor;
+}
+
+void BE_Node::setDown(BE_Node* neighbor) {
+    down = neighbor;
+}
+
+void BE_Node::setLeft(BE_Node* neighbor) {
+    left = neighbor;
+}
+
+void BE_Node::setRight(BE_Node* neighbor) {
+    right = neighbor;
+}
+
+void BE_Node::removeUp() {
+    if (up != nullptr && up->down != this) {
+        up = nullptr;
+    }
+}
+
+void BE_Node::removeDown() {
+    if (down != nullptr && down->up != this) {
+        down = nullptr;
+    }
+}
+
+void BE_Node::removeLeft() {
+    if (left != nullptr && left->right != this) {
+        left = nullptr;
+    }
+}
+
+void BE_Node::removeRight() {
+    if (right != nullptr && right->left != this) {
+        right = nullptr;
+    }
+}
+
+void BE_Node::printConnections() { // FOR TESTS
+    cout << "Node ID: " << ID << endl;
+    cout << "Connections:" << endl;
+    if (up != nullptr) {
+        cout << "  Up: Node " << up->getNodeID() << endl;
+    } else {
+        cout << "  Up: None" << endl;
+    }
+    if (down != nullptr) {
+        cout << "  Down: Node " << down->getNodeID() << endl;
+    } else {
+        cout << "  Down: None" << endl;
+    }
+    if (left != nullptr) {
+        cout << "  Left: Node " << left->getNodeID() << endl;
+    } else {
+        cout << "  Left: None" << endl;
+    }
+    if (right != nullptr) {
+        cout << "  Right: Node " << right->getNodeID() << endl;
+    } else {
+        cout << "  Right: None" << endl;
+    }
+}
+
 bool BE_Node::checkVisited() {
     return visited;
 }
@@ -44,3 +125,4 @@ bool BE_Node::checkVisited() {
 void BE_Node::setVisited() {
     visited = true;
 }
+
