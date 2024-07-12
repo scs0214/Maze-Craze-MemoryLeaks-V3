@@ -21,7 +21,7 @@ class BE_NodeMatrix {
         BE_NodeMatrix();
         ~BE_NodeMatrix();
         void initializeNodeMatrix();
-        void initializeNeighbors();
+        vector<vector<BE_Node*>>& getMatrix();
         void printNodeMatrix();
 };
 

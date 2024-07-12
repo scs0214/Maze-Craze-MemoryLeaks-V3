@@ -34,10 +34,6 @@ class BE_Node {
         void setDown(BE_Node* neighbor);
         void setLeft(BE_Node* neighbor);
         void setRight(BE_Node* neighbor);
-        void removeUp();
-        void removeDown();
-        void removeLeft();
-        void removeRight();
         void printConnections();
         bool checkVisited();
         void setVisited();

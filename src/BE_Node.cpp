@@ -69,30 +69,6 @@ void BE_Node::setRight(BE_Node* neighbor) {
     right = neighbor;
 }
 
-void BE_Node::removeUp() {
-    if (up != nullptr && up->down != this) {
-        up = nullptr;
-    }
-}
-
-void BE_Node::removeDown() {
-    if (down != nullptr && down->up != this) {
-        down = nullptr;
-    }
-}
-
-void BE_Node::removeLeft() {
-    if (left != nullptr && left->right != this) {
-        left = nullptr;
-    }
-}
-
-void BE_Node::removeRight() {
-    if (right != nullptr && right->left != this) {
-        right = nullptr;
-    }
-}
-
 void BE_Node::printConnections() { // FOR TESTS
     cout << "Node ID: " << ID << endl;
     cout << "Connections:" << endl;

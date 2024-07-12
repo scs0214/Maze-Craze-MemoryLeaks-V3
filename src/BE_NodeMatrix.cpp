@@ -39,23 +39,8 @@ void BE_NodeMatrix::initializeNodeMatrix() {
     }
 }
 
-void BE_NodeMatrix::initializeNeighbors() {
-    for (int i = 0; i < rowAmount; ++i) {
-        for (int j = 0; j < colAmount; ++j) {
-            if (i > 0) {
-                matrix[i][j]->setUp(matrix[i-1][j]);
-            }
-            if (i < rowAmount - 1) {
-                matrix[i][j]->setDown(matrix[i+1][j]);
-            }
-            if (j > 0) {
-                matrix[i][j]->setLeft(matrix[i][j-1]);
-            }
-            if (j < colAmount - 1) {
-                matrix[i][j]->setRight(matrix[i][j+1]);
-            }
-        }
-    }
+vector<vector<BE_Node*>>& BE_NodeMatrix::getMatrix() {
+    return matrix;
 }
 
 void BE_NodeMatrix::printNodeMatrix() {
