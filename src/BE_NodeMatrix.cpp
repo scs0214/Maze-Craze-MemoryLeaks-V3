@@ -88,7 +88,7 @@ void BE_NodeMatrix::printNodeMatrix() {
     }
 }
 
-BE_Node* BE_NodeMatrix::getNewNode(int idSearch) {
+BE_Node* BE_NodeMatrix::getNode(int idSearch) {
     BE_Node* returnNode = nullptr;
     for (int i = 0; i < rowAmount; i++) {
         for (int j = 0; j < colAmount; j++) {
@@ -100,11 +100,22 @@ BE_Node* BE_NodeMatrix::getNewNode(int idSearch) {
     return returnNode;
 }
 
-bool BE_NodeMatrix::checkMovePossible(char direction, int row, int col, int actualNode) {
+void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer) { // APPLY POWERS
+    BE_Node* oldNode = getNode(cellPlayer->getActualNode());
+    int newNode = targetNode->getNodeID();
+
+    oldNode->getMatrix()[cellPlayer->getRow()][cellPlayer->getCol()] = new BE_CellNormal; // Gets old position to create a empty cell in it
+    targetNode->getMatrix()[newRow][newCol] = cellPlayer;
+    cellPlayer->setRow(newRow);
+    cellPlayer->setCol(newCol);
+    cellPlayer->setActualNode(newNode); // Moves cellPlayer and modifies its values.
+}
+
+bool BE_NodeMatrix::checkMovePossible(char direction, BE_CellPlayer* cellPlayer) {
     bool movePossible = false;
-    int newRow = row;
-    int newCol = col;
-    int newNode = actualNode;
+    int newRow = cellPlayer->getRow();
+    int newCol = cellPlayer->getCol();
+    int newNode = cellPlayer->getActualNode();
 
     if (direction == 'w') { // Up
         newRow--;
@@ -139,24 +150,14 @@ bool BE_NodeMatrix::checkMovePossible(char direction, int row, int col, int actu
         newNode++;
     }
 
-    BE_Node* targetNode = getNewNode(newNode);
+    BE_Node* targetNode = getNode(newNode);
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
         if(symbol != 'X') { // Checks if the position to access is NOT an unaccessible cell
+            movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }
-        else {
-            cout << "Move not possible: Target cell symbol is 'X'" << endl;
-        }
     } 
-    else {
-        cout << "Move not possible: Target node does not exist" << endl;
-    }
-
-    cout << "CheckMovePossible: Direction: " << direction 
-              << ", Start: (" << row << ", " << col << "), New: (" 
-              << newRow << ", " << newCol << "), NewNode: " << newNode 
-              << ", MovePossible: " << movePossible << endl;
-
+    
     return movePossible;
 }
