@@ -29,7 +29,8 @@ class BE_NodeMatrix {
         void printNodeMatrix();
         BE_Node* getNode(int idSearch);
         void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer);
-        bool checkMovePossible(char direction, BE_CellPlayer* cellPlayer);
+        void inputManager(char direction, int& newRow, int& newCol, int& newNode, int modifier);
+        bool tryMove(char direction, BE_CellPlayer* cellPlayer);
 };
 
 #endif
