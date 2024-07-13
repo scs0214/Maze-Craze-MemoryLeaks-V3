@@ -87,3 +87,76 @@ void BE_NodeMatrix::printNodeMatrix() {
         }
     }
 }
+
+BE_Node* BE_NodeMatrix::getNewNode(int idSearch) {
+    BE_Node* returnNode = nullptr;
+    for (int i = 0; i < rowAmount; i++) {
+        for (int j = 0; j < colAmount; j++) {
+            if (matrix[i][j]->getNodeID() == idSearch) {
+                returnNode = matrix[i][j];
+            }
+        }
+    }
+    return returnNode;
+}
+
+bool BE_NodeMatrix::checkMovePossible(char direction, int row, int col, int actualNode) {
+    bool movePossible = false;
+    int newRow = row;
+    int newCol = col;
+    int newNode = actualNode;
+
+    if (direction == 'w') { // Up
+        newRow--;
+    }
+    else if (direction == 's') { // Down
+        newRow++;
+    }
+    else if (direction == 'a') { // Left
+        newCol--;
+    }
+    else if (direction == 'd') { // Right
+        newCol++;
+    }
+    else { // If the direction is not valid
+        return false;
+    }
+
+    if (newRow < 0) { // Modifies values if out of bounds
+        newRow = NODE_SIZE-1;
+        newNode = newNode - NODE_MATRIX_SIZE;
+    }
+    else if (newRow > NODE_SIZE-1) {
+        newRow = 0;
+        newNode = newNode + NODE_MATRIX_SIZE;
+    }
+    if (newCol < 0) {
+        newCol = NODE_SIZE-1;
+        newNode--;
+    }
+    else if (newCol > NODE_SIZE-1) {
+        newCol = 0;
+        newNode++;
+    }
+
+    BE_Node* targetNode = getNewNode(newNode);
+    if(targetNode != nullptr) { // Checks if the node to access exists
+        char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
+        if(symbol != 'X') { // Checks if the position to access is NOT an unaccessible cell
+            movePossible = true;                      
+        }
+        else {
+            cout << "Move not possible: Target cell symbol is 'X'" << endl;
+        }
+    } 
+    else {
+        cout << "Move not possible: Target node does not exist" << endl;
+    }
+
+    cout << "CheckMovePossible: Direction: " << direction 
+              << ", Start: (" << row << ", " << col << "), New: (" 
+              << newRow << ", " << newCol << "), NewNode: " << newNode 
+              << ", MovePossible: " << movePossible << endl;
+
+    return movePossible;
+}
