@@ -111,7 +111,26 @@ void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* 
     cellPlayer->setActualNode(newNode); // Moves cellPlayer and modifies its values.
 }
 
-bool BE_NodeMatrix::checkMovePossible(char direction, BE_CellPlayer* cellPlayer) {
+void BE_NodeMatrix::inputManager(char direction, int& newRow, int& newCol, int& newNode, int modifier) { // Additional changes for moves if out of bounds
+    if (direction == 'w') {
+        newRow = NODE_SIZE - modifier;
+        newNode = newNode - NODE_MATRIX_SIZE;
+    }
+    else if (direction == 's') {
+        newRow = modifier - 1;
+        newNode = newNode + NODE_MATRIX_SIZE;
+    }
+    if (direction == 'l') {
+        newCol = NODE_SIZE-1;
+        newNode--;
+    }
+    else if (direction == 'r') {
+        newCol = modifier - 1;
+        newNode++;
+    }
+}
+
+bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
     bool movePossible = false;
     int newRow = cellPlayer->getRow();
     int newCol = cellPlayer->getCol();
@@ -133,31 +152,23 @@ bool BE_NodeMatrix::checkMovePossible(char direction, BE_CellPlayer* cellPlayer)
         return false;
     }
 
-    if (newRow < 0) { // Modifies values if out of bounds
-        newRow = NODE_SIZE-1;
-        newNode = newNode - NODE_MATRIX_SIZE;
+    if((newRow < 0 || newRow > NODE_SIZE-1 || newCol < 0 || newCol > NODE_SIZE-1)) { // Checks if out of bounds for normal move
+        inputManager(direction, newRow, newCol, newNode, 1);
     }
-    else if (newRow > NODE_SIZE-1) {
-        newRow = 0;
-        newNode = newNode + NODE_MATRIX_SIZE;
-    }
-    if (newCol < 0) {
-        newCol = NODE_SIZE-1;
-        newNode--;
-    }
-    else if (newCol > NODE_SIZE-1) {
-        newCol = 0;
-        newNode++;
+    else if ((newRow >= 0 && newRow <= NODE_SIZE-1 && newCol >= 0 && newCol <= NODE_SIZE-1) && cellPlayer->getPlayer()->getJumpWallAmount() > 0) {
+        // Checks if a jump wall can be used
+        inputManager(direction, newRow, newCol, newNode, 2);
+        cellPlayer->getPlayer()->useJumpWall();
     }
 
     BE_Node* targetNode = getNode(newNode);
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
+
         if(symbol != 'X') { // Checks if the position to access is NOT an unaccessible cell
             movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }
-    } 
-    
+    }
     return movePossible;
 }

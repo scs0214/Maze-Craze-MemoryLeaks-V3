@@ -11,10 +11,10 @@ class BE_CellPowered : public BE_CellBase {
     private:
         int row;
         int col;
-        BE_Power power;
+        BE_Power* power;
         
     public:
-        BE_CellPowered(int r, int c, BE_Power power);
+        BE_CellPowered(int r, int c, BE_Power* power);
         char getSymbol() const override;
 };
 
