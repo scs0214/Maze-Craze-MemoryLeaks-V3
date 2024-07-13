@@ -3,16 +3,16 @@
 
 using namespace std;
 
-class BE_Player {
+class BE_Player { // Needs Player Cell
     public:
-        BE_Player(char p, int n);
+        BE_Player(int p);
+        int getPlayerID();
         int getJumpWallAmount();
         void getJumpWall();
         void useJumpWall();
 
     private:
-        char playerID;
-        int nodeID;
+        int playerID;
         int jumpWallAmount;
 };
 
