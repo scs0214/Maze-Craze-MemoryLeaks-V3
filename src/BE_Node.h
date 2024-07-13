@@ -39,7 +39,6 @@ class BE_Node {
         void printConnections();
         bool checkVisited();
         void setVisited();
-        void movePlayer(char direction);
 };
 
 #endif

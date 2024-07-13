@@ -27,7 +27,8 @@ class BE_NodeMatrix {
         void fillVerticalEdges(int rowNM, int colNM, int columnValue);
         void addLinearEdges();
         void printNodeMatrix();
-        //bool checkMovePossible();
+        BE_Node* getNewNode(int idSearch);
+        bool checkMovePossible(char direction, int row, int col, int actualNode);
         //void movePlayer(); missing
 };
 
