@@ -33,6 +33,10 @@ void BE_Node::printMatrix() {
     }
 }
 
+vector<vector<BE_CellBase*>>& BE_Node::getMatrix() {
+    return matrix;
+}
+
 int BE_Node::getNodeID() {
     return ID;
 }
@@ -101,4 +105,3 @@ bool BE_Node::checkVisited() {
 void BE_Node::setVisited() {
     visited = true;
 }
-

@@ -2,6 +2,7 @@
 #define NODEMATRIXBE_H
 
 #include "BE_Node.h"
+#include "BE_CellNotAvailable.h"
 #include "VALUES.h"
 
 #include <stack>
@@ -19,9 +20,15 @@ class BE_NodeMatrix {
     public:
         BE_NodeMatrix();
         ~BE_NodeMatrix();
-        void initializeNodeMatrix();
         vector<vector<BE_Node*>>& getMatrix();
+        void initializeNodeMatrix();
+        void addEdgesToCorners();
+        void fillHorizontalEdges(int rowNM, int colNM, int rowValue);
+        void fillVerticalEdges(int rowNM, int colNM, int columnValue);
+        void addLinearEdges();
         void printNodeMatrix();
+        //bool checkMovePossible();
+        //void movePlayer(); missing
 };
 
 #endif

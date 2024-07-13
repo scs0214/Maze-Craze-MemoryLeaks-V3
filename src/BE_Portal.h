@@ -1,9 +1,9 @@
-#ifndef POWERBE_H
-#define POWERBE_H
+#ifndef PORTALBE_H
+#define PORTALBE_H
 
 using namespace std;
 
-class BE_Power { // CREATE DIFFERENT POWERS
+class BE_Portal { // CREATE PORTAL CELL
     public:
         virtual void immediateEffect();
 };

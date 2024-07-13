@@ -4,6 +4,7 @@
 #include "BE_CellBase.h"
 #include "BE_CellNormal.h"
 #include "BE_CellPowered.h"
+#include "BE_CellPlayer.h"
 
 #include <vector>
 using namespace std;
@@ -25,6 +26,7 @@ class BE_Node {
         ~BE_Node();
         void fillMatrix();
         void printMatrix();
+        vector<vector<BE_CellBase*>>& getMatrix();
         int getNodeID();
         BE_Node* getUp();
         BE_Node* getDown();
