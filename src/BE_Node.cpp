@@ -14,7 +14,7 @@ BE_Node::~BE_Node() {
 void BE_Node::fillMatrix() {
     for (int i = 0; i < rowAmount; i++) {
         for (int j = 0; j < colAmount; j++) {
-            matrix[i][j] = new BE_CellNormal(i, j);
+            matrix[i][j] = new BE_CellNormal;
         }
     }
 }
