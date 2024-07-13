@@ -15,7 +15,6 @@ class BE_NodeMatrix {
         int rowAmount;
         int colAmount;
         vector<vector<BE_Node*>> matrix;
-        char generateRandomDirection();
         
     public:
         BE_NodeMatrix();
