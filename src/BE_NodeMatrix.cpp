@@ -174,7 +174,6 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
             movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }
-    } 
-    
+    }
     return movePossible;
 }

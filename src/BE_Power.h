@@ -5,7 +5,7 @@ using namespace std;
 
 class BE_Power { // CREATE DIFFERENT POWERS
     public:
-        virtual int immediateEffect();
+        virtual char getSymbol() = 0;
 };
 
 #endif
