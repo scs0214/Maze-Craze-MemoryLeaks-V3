@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class BE_Player { // Needs Player Cell
+class BE_Player {
     public:
         BE_Player(int p);
         int getPlayerID();
