@@ -22,11 +22,11 @@ class BE_NodeMatrix {
         ~BE_NodeMatrix();
         vector<vector<BE_Node*>>& getMatrix();
         void initializeNodeMatrix();
+        void placePowers();
         void addEdgesToCorners();
         void fillHorizontalEdges(int rowNM, int colNM, int rowValue);
         void fillVerticalEdges(int rowNM, int colNM, int columnValue);
         void addLinearEdges();
-        void printNodeMatrix();
         BE_Node* getNode(int rowSearch, int colSearch);
         void getRowColFromNode(int& row, int& col, int nodeNumber);
         void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer);

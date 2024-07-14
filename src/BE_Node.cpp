@@ -19,6 +19,37 @@ void BE_Node::fillMatrix() {
     }
 }
 
+void BE_Node::placePowers() {
+    BE_Power* power;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> valuesPS(0, 99); // Probabilities for Power Spawn
+    uniform_int_distribution<> valuesPT(1, 3); // Values for Power Types
+    for (int i = 0; i < rowAmount; i++) {
+        for (int j = 0; j < colAmount; j++) {
+            if(matrix[i][j] != nullptr && matrix[i][j]->getSymbol() == 'N' && valuesPS(gen) < POWER_SPAWN_RATE) {
+                if (valuesPT(gen) == 1) {
+                    power = new BE_PowerJumpWall;
+                }
+                else if (valuesPT(gen) == 2) {
+                    power = new BE_PowerDoubleTurn;
+                }
+                else if (valuesPT(gen) == 3) {
+                    power = new BE_PowerMindControl;
+                }
+                else {
+                    power = nullptr;
+                }
+                
+                if (power != nullptr) {
+                    delete matrix[i][j];
+                    matrix[i][j] = new BE_CellPowered(power);
+                }
+            }
+        }
+    }
+}
+
 void BE_Node::printMatrix() {
     cout << "Printing matrix..." << endl;
     for (int i = 0; i < rowAmount; i++) {
@@ -71,31 +102,6 @@ void BE_Node::setLeft(BE_Node* neighbor) {
 
 void BE_Node::setRight(BE_Node* neighbor) {
     right = neighbor;
-}
-
-void BE_Node::printConnections() { // FOR TESTS
-    cout << "Node ID: " << ID << endl;
-    cout << "Connections:" << endl;
-    if (up != nullptr) {
-        cout << "  Up: Node " << up->getNodeID() << endl;
-    } else {
-        cout << "  Up: None" << endl;
-    }
-    if (down != nullptr) {
-        cout << "  Down: Node " << down->getNodeID() << endl;
-    } else {
-        cout << "  Down: None" << endl;
-    }
-    if (left != nullptr) {
-        cout << "  Left: Node " << left->getNodeID() << endl;
-    } else {
-        cout << "  Left: None" << endl;
-    }
-    if (right != nullptr) {
-        cout << "  Right: Node " << right->getNodeID() << endl;
-    } else {
-        cout << "  Right: None" << endl;
-    }
 }
 
 bool BE_Node::checkVisited() {

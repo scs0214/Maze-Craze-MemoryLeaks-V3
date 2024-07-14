@@ -6,11 +6,11 @@ using namespace std;
 
 UI_Player::UI_Player() :  jumpWallAmount(0) {}
 
-char UI_Player::processInputP1(char& direction) {
+void UI_Player::processInputP1(char& direction) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            return false;
+            return;
         }
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
@@ -22,14 +22,13 @@ char UI_Player::processInputP1(char& direction) {
             }
         }
     }
-    return direction;
 }
 
-char UI_Player::processInputP2(char& direction) {
+void UI_Player::processInputP2(char& direction) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            return false;
+            return;
         }
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
@@ -41,7 +40,6 @@ char UI_Player::processInputP2(char& direction) {
             }
         }
     }
-    return direction;
 }
 
 void UI_Player::setJumpWallAmount(int jwAmountBackend) {

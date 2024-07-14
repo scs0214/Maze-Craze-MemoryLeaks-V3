@@ -8,8 +8,8 @@ using namespace std;
 class UI_Player {
 public:
     UI_Player();
-    char processInputP1(char& direction);
-    char processInputP2(char& direction);
+    void processInputP1(char& direction);
+    void processInputP2(char& direction);
     void setPosition(int rowBackend, int colBackend);
     void setJumpWallAmount(int jwAmountBackend);
     int getJumpWallAmount() const;

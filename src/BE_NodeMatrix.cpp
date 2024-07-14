@@ -27,6 +27,15 @@ void BE_NodeMatrix::initializeNodeMatrix() {
     }
 }
 
+void BE_NodeMatrix::placePowers() {
+    for (int i = 0; i < rowAmount; i++) {
+        for (int j = 0; j < colAmount; j++) {
+            matrix[i][j]->placePowers();
+        }
+    }
+}
+
+
 void BE_NodeMatrix::addEdgesToCorners() {
     for(int i = 0; i < NODE_MATRIX_SIZE; i++) {
         for(int j = 0; j < NODE_MATRIX_SIZE; j++) {
@@ -73,17 +82,6 @@ void BE_NodeMatrix::addLinearEdges() {
             if(matrix[i][j]->getRight() == nullptr && j < NODE_MATRIX_SIZE-1) { // Right Edge
                 fillVerticalEdges(i, j, NODE_SIZE-1);
             }
-        }
-    }
-}
-
-void BE_NodeMatrix::printNodeMatrix() {
-    for (int i = 0; i < rowAmount; i++) {
-        for (int j = 0; j < colAmount; j++) {
-            printf("NODE %i: \n", matrix[i][j]->getNodeID());
-            matrix[i][j]->printMatrix();
-            matrix[i][j]->printConnections();
-            printf("\n");
         }
     }
 }
@@ -171,6 +169,7 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
         if(symbol != 'X' && symbol != '2' && symbol != '1') { // Checks if the position to access is NOT an unaccessible cell
+
             movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }
