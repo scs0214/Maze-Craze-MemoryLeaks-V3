@@ -4,17 +4,7 @@
 #include <iostream>
 using namespace std;
 
-UI_Player::UI_Player() :  positionX(0), positionY(0), jumpWallAmount(0) {}
-
-void UI_Player::renderPlayer(SDL_Renderer* renderer, int row, int col, int num) {
-    SDL_Rect player = {col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE};
-    if (!imageLoader.textures.empty()) {
-        SDL_RenderCopy(renderer, imageLoader.textures[num], nullptr, &player);
-    } else {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &player);
-    }
-}
+UI_Player::UI_Player() :  jumpWallAmount(0) {}
 
 char UI_Player::processInputP1(char& direction) {
     SDL_Event event;
@@ -52,11 +42,6 @@ char UI_Player::processInputP2(char& direction) {
         }
     }
     return direction;
-}
-
-void UI_Player::setPosition(int rowBackend, int colBackend) { // NOT USING
-    this->positionY = rowBackend;
-    this->positionX = rowBackend;
 }
 
 void UI_Player::setJumpWallAmount(int jwAmountBackend) {

@@ -3,11 +3,12 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <vector>
 using namespace std;
 
 class UI_Board {
 public:
-    void renderBoard(SDL_Renderer* renderer, int** playerBoard, int rowAmount, int colAmount);
+    void renderBoard(SDL_Renderer* renderer, vector<vector<int>> playerBoard);
 };
 
 #endif

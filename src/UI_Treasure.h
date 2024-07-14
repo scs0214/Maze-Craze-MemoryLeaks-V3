@@ -7,7 +7,6 @@ using namespace std;
 
 class UI_Treasure {
 public:
-    void renderTreasure(SDL_Renderer* renderer, int row, int col);
     void runWinScreen(SDL_Renderer* renderer, int winnerPlayer);
 };
 

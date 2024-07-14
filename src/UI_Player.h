@@ -8,7 +8,6 @@ using namespace std;
 class UI_Player {
 public:
     UI_Player();
-    void renderPlayer(SDL_Renderer* renderer, int row, int col, int num);
     char processInputP1(char& direction);
     char processInputP2(char& direction);
     void setPosition(int rowBackend, int colBackend);
@@ -16,8 +15,6 @@ public:
     int getJumpWallAmount() const;
 
 private:
-    int positionX;
-    int positionY;
     int jumpWallAmount;
 };
 

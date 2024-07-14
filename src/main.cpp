@@ -2,10 +2,13 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "BE_Main.h"
+#include "BE_NodeMatrix.h"
+#include "BE_Translator.h"
 #include "UI_MAIN.h"
 #include "UI_TitleScreen.h"
-#include "UI_Treasure.h"
 #include "UI_Player.h"
+#include "UI_Treasure.h"
 #include <iostream>
 using namespace std;
 
@@ -15,11 +18,13 @@ int main(int argc, char* argv[]) {
     };
 
     {
+        BE_NodeMatrix* nodeMatrix = new BE_NodeMatrix;
+        BE_Main beMain(nodeMatrix);
+        BE_Translator beTranslator;
         UI_MAIN uiMain;
         UI_TitleScreen uiTitleScreen;
         UI_Treasure uiWinScreen;
         UI_Player uiPlayer;
-
 
         if (!uiMain.initialize()) {
             cerr << "Failed to initialize UI_MAIN." << endl;
@@ -32,20 +37,7 @@ int main(int argc, char* argv[]) {
         bool running = true;
         char direction = 'x'; 
         int playerTurn = 1;
-
-        int rowTest = 5;
-        int colTest = 5;
-        int** testMatrix = new int*[rowTest]; 
-        for (int i = 0; i < rowTest; i++) {
-            testMatrix[i] = new int[colTest];
-        }
-
-        testMatrix[0][0] = 1;
-        testMatrix[1][3] = 3;
-        testMatrix[4][3] = 4;
-        testMatrix[3][0] = 5;
-        testMatrix[1][4] = 6;
-        testMatrix[2][2] = 7;
+        beMain.initializeNodeMatrix();
 
         while (running) {
             // Renderer Section (renders the different GameStates)
@@ -53,7 +45,7 @@ int main(int argc, char* argv[]) {
                 uiTitleScreen.runTitleScreen(renderer);
             } else if (currentGameState == MAIN_PROGRAM) {
                 // Initialize Backend
-                uiMain.runMainProgram(renderer, testMatrix, rowTest, colTest);
+                uiMain.runMainProgram(renderer, beTranslator.generateMatrixForUI(beMain.getNodeMatrix()->getMatrix()));
             }
             else if (currentGameState == WIN_SCREEN) {
                 uiWinScreen.runWinScreen(renderer, 1);

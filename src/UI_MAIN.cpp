@@ -65,10 +65,10 @@ SDL_Renderer* UI_MAIN::getRenderer() const {
     return renderer;
 }
 
-void UI_MAIN::runMainProgram(SDL_Renderer* renderer, int** playerBoard, int rows, int cols) {
+void UI_MAIN::runMainProgram(SDL_Renderer* renderer, vector<vector<int>> playerBoard) {
     SDL_RenderClear(renderer);
 
-    uiBoard.renderBoard(renderer, playerBoard, rows, cols);
+    uiBoard.renderBoard(renderer, playerBoard);
 
     SDL_RenderPresent(renderer);
 }

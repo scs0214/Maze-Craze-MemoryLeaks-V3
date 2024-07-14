@@ -5,8 +5,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "VALUES.h"
-#include <string>
-#include <vector>
 using namespace std;
 
 class UI_MAIN {
@@ -15,7 +13,7 @@ public:
     ~UI_MAIN();
     bool initialize();
     SDL_Renderer* getRenderer() const;
-    void runMainProgram(SDL_Renderer* renderer, int** playerBoard, int rows, int cols);
+    void runMainProgram(SDL_Renderer* renderer, vector<vector<int>> playerBoard);
 
 private:
     SDL_Window* window;
