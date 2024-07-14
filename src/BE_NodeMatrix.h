@@ -27,9 +27,9 @@ class BE_NodeMatrix {
         void fillVerticalEdges(int rowNM, int colNM, int columnValue);
         void addLinearEdges();
         void printNodeMatrix();
-        BE_Node* getNode(int idSearch);
+        BE_Node* getNode(int rowSearch, int colSearch);
+        void getRowColFromNode(int& row, int& col, int nodeNumber);
         void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer);
-        void inputManager(char direction, int& newRow, int& newCol, int& newNode, int modifier);
         bool tryMove(char direction, BE_CellPlayer* cellPlayer);
 };
 
