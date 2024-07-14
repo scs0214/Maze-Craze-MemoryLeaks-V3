@@ -5,7 +5,12 @@
 #include "BE_CellNormal.h"
 #include "BE_CellPowered.h"
 #include "BE_CellPlayer.h"
+#include "BE_PowerJumpWall.h"
+#include "BE_PowerDoubleTurn.h"
+#include "BE_PowerMindControl.h"
+#include "VALUES.h"
 
+#include <random>
 #include <vector>
 using namespace std;
 
@@ -25,6 +30,7 @@ class BE_Node {
         BE_Node(int id, int r, int c);
         ~BE_Node();
         void fillMatrix();
+        void placePowers();
         void printMatrix();
         vector<vector<BE_CellBase*>>& getMatrix();
         int getNodeID();
@@ -36,7 +42,6 @@ class BE_Node {
         void setDown(BE_Node* neighbor);
         void setLeft(BE_Node* neighbor);
         void setRight(BE_Node* neighbor);
-        void printConnections();
         bool checkVisited();
         void setVisited();
 };

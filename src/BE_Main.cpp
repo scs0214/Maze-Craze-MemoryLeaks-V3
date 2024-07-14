@@ -32,6 +32,8 @@ void BE_Main::initializeNodeMatrix(BE_CellPlayer* p1, BE_CellPlayer* p2) {
     int maxVNP = NODE_SIZE-1; // Max value for Node Pos
     nodeMatrix->getMatrix()[0][0]->getMatrix()[0][0] = p1;
     nodeMatrix->getMatrix()[maxVNM][maxVNM]->getMatrix()[maxVNP][maxVNP] = p2;
+
+    nodeMatrix->placePowers();
 }
 
 bool BE_Main::movePlayer(BE_CellPlayer* player, char direction) {

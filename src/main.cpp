@@ -37,7 +37,10 @@ int main(int argc, char* argv[]) {
         SDL_Event event;
         bool running = true;
         char direction = 'x'; 
+        int playerInput = 1;
+        int playerToMove = 1;
         int turnManager = 1;
+
         int maxVNP = NODE_SIZE-1; // Max value for Node Pos
         int maxVN = NODE_MATRIX_SIZE*NODE_MATRIX_SIZE; // Max value for Node
         BE_Player* p1 = new BE_Player(1);
@@ -51,8 +54,8 @@ int main(int argc, char* argv[]) {
             if (currentGameState == TITLE_SCREEN) {
                 uiTitleScreen.runTitleScreen(renderer);
             } else if (currentGameState == MAIN_PROGRAM) {
-                // Initialize Backend
                 uiMain.runMainProgram(renderer, beTranslator.generateMatrixForUI(beMain.getNodeMatrix()->getMatrix()));
+                SDL_Delay(1000);
             }
             else if (currentGameState == WIN_SCREEN) {
                 uiWinScreen.runWinScreen(renderer, 1);
@@ -73,16 +76,20 @@ int main(int argc, char* argv[]) {
                 else if (currentGameState == MAIN_PROGRAM) {
                     bool moveCompleted = false;
                     while(!moveCompleted) {
-                        if (turnManager == 1) {
-                            direction = uiPlayer.processInputP1(direction);
+                        if (playerInput == 1) {
+                            uiPlayer.processInputP1(direction);
+                        }
+                        else if (playerInput == 2) {
+                            uiPlayer.processInputP2(direction);
+                        }
+
+                        if(playerToMove == 1) {
                             moveCompleted = beMain.movePlayer(player1, direction);
                         }
-                        else if (turnManager == 2) {
-                            direction = uiPlayer.processInputP2(direction);
-                            moveCompleted = beMain.movePlayer(player2, direction);
+                        else if(playerToMove == 2) {
+                            moveCompleted = beMain.movePlayer(player1, direction);
                         }
                         direction = 'x';
-                        // Backend changes
                     }
                     turnManager = beMain.turnChange(turnManager);          
                 }
