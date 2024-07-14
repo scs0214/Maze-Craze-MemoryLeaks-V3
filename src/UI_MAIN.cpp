@@ -68,6 +68,9 @@ SDL_Renderer* UI_MAIN::getRenderer() const {
 void UI_MAIN::runMainProgram(SDL_Renderer* renderer, vector<vector<int>> playerBoard) {
     SDL_RenderClear(renderer);
 
+    SDL_Rect bgImage = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+    SDL_RenderCopy(renderer, imageLoader.textures[11], NULL, &bgImage);
+
     uiBoard.renderBoard(renderer, playerBoard);
 
     SDL_RenderPresent(renderer);

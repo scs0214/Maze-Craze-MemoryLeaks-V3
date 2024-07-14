@@ -3,6 +3,7 @@
 
 #include "BE_Node.h"
 #include "BE_CellNotAvailable.h"
+#include "BE_CellTreasure.h"
 #include "VALUES.h"
 
 #include <stack>
@@ -23,6 +24,7 @@ class BE_NodeMatrix {
         vector<vector<BE_Node*>>& getMatrix();
         void initializeNodeMatrix();
         void placePowers();
+        BE_CellTreasure* initializeTreasure();
         void addEdgesToCorners();
         void fillHorizontalEdges(int rowNM, int colNM, int rowValue);
         void fillVerticalEdges(int rowNM, int colNM, int columnValue);
