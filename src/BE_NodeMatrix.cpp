@@ -35,6 +35,30 @@ void BE_NodeMatrix::placePowers() {
     }
 }
 
+BE_CellTreasure* BE_NodeMatrix::initializeTreasure() {
+    BE_CellTreasure* treasure;
+    bool treasurePlaced = false;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> valuesNM(0, NODE_MATRIX_SIZE-1);
+    uniform_int_distribution<> valuesN(0, NODE_SIZE-1);
+    
+    while(!treasurePlaced) {
+        int rowS = valuesNM(gen);
+        int colS = valuesNM(gen);
+        BE_Node* node = getNode(rowS, colS);
+
+        int rowForTreasure = valuesN(gen);
+        int colForTreasure = valuesN(gen);
+
+        if(node->getMatrix()[rowForTreasure][colForTreasure]->getSymbol() == 'N') {
+            treasure = new BE_CellTreasure(rowForTreasure, colForTreasure, node->getNodeID());
+            node->getMatrix()[rowForTreasure][colForTreasure] = treasure;
+            treasurePlaced = true;
+        }
+    }
+    return treasure;
+}
 
 void BE_NodeMatrix::addEdgesToCorners() {
     for(int i = 0; i < NODE_MATRIX_SIZE; i++) {

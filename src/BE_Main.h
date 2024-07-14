@@ -7,6 +7,7 @@
 #include "BE_Player.h"
 #include "BE_Graph.h"
 #include "BE_NodeMatrix.h"
+#include "BE_CellTreasure.h"
 #include "VALUES.h"
 using namespace std;
 

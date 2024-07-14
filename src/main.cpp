@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
         int playerInput = 1;
         int playerToMove = 1;
         int turnManager = 1;
+        int winnerPlayer = 0;
 
         int maxVNP = NODE_SIZE-1; // Max value for Node Pos
         int maxVN = NODE_MATRIX_SIZE*NODE_MATRIX_SIZE; // Max value for Node
@@ -47,7 +48,9 @@ int main(int argc, char* argv[]) {
         BE_Player* p2 = new BE_Player(2);
         BE_CellPlayer* player1 = new BE_CellPlayer(0, 0, 1, p1);
         BE_CellPlayer* player2 = new BE_CellPlayer(maxVNP, maxVNP, maxVN, p2);
+        BE_CellTreasure* treasure;
         beMain.initializeNodeMatrix(player1, player2);
+        treasure = nodeMatrix->initializeTreasure();
 
         while (running) {
             // Renderer Section (renders the different GameStates)
@@ -91,7 +94,11 @@ int main(int argc, char* argv[]) {
                         }
                         direction = 'x';
                     }
-                    turnManager = beMain.turnChange(turnManager);          
+                    turnManager = beMain.turnChange(turnManager);   
+                    winnerPlayer = treasure->getWinnerPlayer(player1, player2);
+                    if (winnerPlayer != 0) {
+                        currentGameState = WIN_SCREEN;
+                    }
                 }
 
                 else if (currentGameState == WIN_SCREEN) {
