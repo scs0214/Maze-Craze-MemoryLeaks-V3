@@ -88,11 +88,11 @@ void BE_NodeMatrix::printNodeMatrix() {
     }
 }
 
-BE_Node* BE_NodeMatrix::getNode(int idSearch) {
+BE_Node* BE_NodeMatrix::getNode(int rowSearch, int colSearch) {
     BE_Node* returnNode = nullptr;
     for (int i = 0; i < rowAmount; i++) {
         for (int j = 0; j < colAmount; j++) {
-            if (matrix[i][j]->getNodeID() == idSearch) {
+            if (i == rowSearch && j == colSearch) {
                 returnNode = matrix[i][j];
             }
         }
@@ -100,22 +100,39 @@ BE_Node* BE_NodeMatrix::getNode(int idSearch) {
     return returnNode;
 }
 
-void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer) { // APPLY POWERS
-    BE_Node* oldNode = getNode(cellPlayer->getActualNode());
-    int newNode = targetNode->getNodeID();
+void BE_NodeMatrix::getRowColFromNode(int& row, int& col, int nodeNumber) {
+    for (int i = 0; i < rowAmount; i++) {
+        for (int j = 0; j < colAmount; j++) {
+            if (matrix[i][j]->getNodeID() == nodeNumber) {
+                row = i;
+                col = j;
+            }
+        }
+    }
+}
 
-    oldNode->getMatrix()[cellPlayer->getRow()][cellPlayer->getCol()] = new BE_CellNormal; // Gets old position to create a empty cell in it
+
+void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer) { // APPLY POWERS
+    int oldRowN;
+    int oldColN;
+    getRowColFromNode(oldRowN, oldColN, cellPlayer->getActualNode());
+    BE_Node* oldNode = getNode(oldRowN, oldColN);
+
+    oldNode->getMatrix()[cellPlayer->getRow()][cellPlayer->getCol()] = new BE_CellNormal();
     targetNode->getMatrix()[newRow][newCol] = cellPlayer;
     cellPlayer->setRow(newRow);
     cellPlayer->setCol(newCol);
-    cellPlayer->setActualNode(newNode); // Moves cellPlayer and modifies its values.
+    cellPlayer->setActualNode(targetNode->getNodeID()); // Moves cellPlayer and modifies its values.
 }
 
-bool BE_NodeMatrix::checkMovePossible(char direction, BE_CellPlayer* cellPlayer) {
+bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
     bool movePossible = false;
+    int nodeRow;
+    int nodeCol;
     int newRow = cellPlayer->getRow();
     int newCol = cellPlayer->getCol();
     int newNode = cellPlayer->getActualNode();
+    getRowColFromNode(nodeRow, nodeCol, newNode);
 
     if (direction == 'w') { // Up
         newRow--;
@@ -135,25 +152,25 @@ bool BE_NodeMatrix::checkMovePossible(char direction, BE_CellPlayer* cellPlayer)
 
     if (newRow < 0) { // Modifies values if out of bounds
         newRow = NODE_SIZE-1;
-        newNode = newNode - NODE_MATRIX_SIZE;
+        nodeRow--;
     }
     else if (newRow > NODE_SIZE-1) {
         newRow = 0;
-        newNode = newNode + NODE_MATRIX_SIZE;
+        nodeRow++;
     }
     if (newCol < 0) {
         newCol = NODE_SIZE-1;
-        newNode--;
+        nodeCol--;
     }
     else if (newCol > NODE_SIZE-1) {
         newCol = 0;
-        newNode++;
+        nodeCol++;
     }
 
-    BE_Node* targetNode = getNode(newNode);
+    BE_Node* targetNode = getNode(nodeRow, nodeCol);
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
-        if(symbol != 'X') { // Checks if the position to access is NOT an unaccessible cell
+        if(symbol != 'X' && symbol != '2' && symbol != '1') { // Checks if the position to access is NOT an unaccessible cell
             movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }
