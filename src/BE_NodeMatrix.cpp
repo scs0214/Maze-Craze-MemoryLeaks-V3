@@ -147,7 +147,7 @@ void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* 
     cellPlayer->setActualNode(targetNode->getNodeID()); // Moves cellPlayer and modifies its values.
 }
 
-bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
+bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) {
     bool movePossible = false;
     int nodeRow;
     int nodeCol;
@@ -193,7 +193,15 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer) {
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
         if(symbol != 'X' && symbol != '2' && symbol != '1') { // Checks if the position to access is NOT an unaccessible cell
-
+            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
+                getDoubleTurn = true;
+            }
+            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
+                getMindControl = true;
+            }
+            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
+                cellPlayer->getPlayer()->getJumpWall();
+            }
             movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
             movePossible = true;                      
         }

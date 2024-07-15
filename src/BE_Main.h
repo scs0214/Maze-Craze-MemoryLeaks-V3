@@ -21,7 +21,7 @@ class BE_Main {
         BE_Main(BE_NodeMatrix* nm);
         BE_NodeMatrix* getNodeMatrix();
         void initializeNodeMatrix(BE_CellPlayer* p1, BE_CellPlayer* p2);
-        bool movePlayer(BE_CellPlayer* player, char direction);
+        bool movePlayer(BE_CellPlayer* player, char direction, bool& getDoubleTurn, bool& getMindControl);
         int turnChange(int lastTurn);
 };
 

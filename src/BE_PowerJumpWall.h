@@ -8,7 +8,6 @@ using namespace std;
 class BE_PowerJumpWall : public BE_Power {
     public:
         char getSymbol();
-        void immediateEffect(BE_Player* player);
 };
 
 #endif

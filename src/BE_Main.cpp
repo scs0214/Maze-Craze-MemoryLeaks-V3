@@ -36,8 +36,8 @@ void BE_Main::initializeNodeMatrix(BE_CellPlayer* p1, BE_CellPlayer* p2) {
     nodeMatrix->placePowers();
 }
 
-bool BE_Main::movePlayer(BE_CellPlayer* player, char direction) {
-    return nodeMatrix->tryMove(direction, player);
+bool BE_Main::movePlayer(BE_CellPlayer* player, char direction, bool& getDoubleTurn, bool& getMindControl) {
+    return nodeMatrix->tryMove(direction, player, getDoubleTurn, getMindControl);
 }
 
 int BE_Main::turnChange(int lastTurn) {

@@ -3,15 +3,17 @@
 #include <iostream>
 using namespace std;
 
+int buttonWidth = 400;
+int buttonHeight = 75;
+int posX = (WINDOW_WIDTH-buttonWidth)/2;
+int posY = WINDOW_HEIGHT-150;
+
 void UI_TitleScreen::runTitleScreen(SDL_Renderer* renderer) {
     SDL_RenderClear(renderer);
 
     SDL_RenderCopy(renderer, imageLoader.textures[0], nullptr, nullptr);
 
-    int buttonWidth = 500;
-    int buttonHeight = 100;
-
-    SDL_Rect playButton = {(1280-buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    SDL_Rect playButton = {posX, posY, buttonWidth, buttonHeight};
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderFillRect(renderer, &playButton);
 
@@ -25,10 +27,7 @@ bool isPointInRect(int x, int y, SDL_Rect rect) {
 bool UI_TitleScreen::buttonClick(SDL_Event& event) {
     bool returnValue = false;
 
-    int buttonWidth = 500;
-    int buttonHeight = 100;
-
-    SDL_Rect playButton = {(1280-buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    SDL_Rect playButton = {posX, posY, buttonWidth, buttonHeight};
 
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         int x, y;
