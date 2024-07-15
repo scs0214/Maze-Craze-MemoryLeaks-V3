@@ -133,7 +133,7 @@ bool BE_Graph::isValidForExtra(int oldRow, int oldCol, int newRow, int newCol, c
     return returnValue;
 }
 
-void BE_Graph::connectNodeForExtra(vector<vector<BE_Node*>>& matrix, int currentRow, int currentCol) {
+void BE_Graph::connectNodeForExtra(vector<vector<BE_Node*>>& matrix, int currentRow, int currentCol) { // Manages the addition of extra connections
     random_device rd;
     mt19937 gen(rd());
     int missingCont = findMissingConnections(matrix, currentRow, currentCol);

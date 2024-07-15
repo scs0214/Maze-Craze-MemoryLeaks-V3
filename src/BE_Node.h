@@ -5,6 +5,7 @@
 #include "BE_CellNormal.h"
 #include "BE_CellPowered.h"
 #include "BE_CellPlayer.h"
+#include "BE_CellPortal.h"
 #include "BE_PowerJumpWall.h"
 #include "BE_PowerDoubleTurn.h"
 #include "BE_PowerMindControl.h"

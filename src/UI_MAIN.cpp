@@ -65,6 +65,11 @@ SDL_Renderer* UI_MAIN::getRenderer() const {
     return renderer;
 }
 
+bool UI_MAIN::checkIfMazeFits() {
+    int mazeSide = NODE_MATRIX_SIZE*NODE_SIZE*CELL_SIZE;
+    return mazeSide <= WINDOW_WIDTH && mazeSide <= WINDOW_HEIGHT;
+}
+
 void UI_MAIN::runMainProgram(SDL_Renderer* renderer, vector<vector<int>> playerBoard) {
     SDL_RenderClear(renderer);
 

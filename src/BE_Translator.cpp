@@ -32,7 +32,7 @@ int BE_Translator::symbolTranslator(char symbol) {
     return returnValue;
 }
 
-void BE_Translator::saveMatrix(vector<vector<int>>& uiMatrix, BE_Node* node, int rowNM, int colNM) {
+void BE_Translator::saveMatrix(vector<vector<int>>& uiMatrix, BE_Node* node, int rowNM, int colNM) { // Saves each node's matrix values
     int rowVB = rowNM*NODE_SIZE;
     int colVB = colNM*NODE_SIZE;
     for(int i = 0; i < NODE_SIZE; i++) {

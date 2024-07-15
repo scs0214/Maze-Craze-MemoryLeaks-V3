@@ -35,6 +35,70 @@ void BE_NodeMatrix::placePowers() {
     }
 }
 
+BE_CellPortal* BE_NodeMatrix::placeFirstPortal(int row, int col) {
+    BE_CellPortal* portal = nullptr;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> valuesPS(0, 99);
+    for (int i = 0; i < NODE_SIZE; i++) {
+        for (int j = 0; j < NODE_SIZE; j++) {
+            if(matrix[row][col]->getMatrix()[i][j]->getSymbol() == 'N' && valuesPS(gen) < PORTAL_SPAWN_RATE) {
+                BE_Node* currentNode = getNode(row, col);
+                portal = new BE_CellPortal(i, j, currentNode->getNodeID());
+                return portal;
+            }
+        }
+    }
+    return portal;
+}
+
+BE_CellPortal* BE_NodeMatrix::generateRandomPortal() {
+    BE_CellPortal* portal;
+    bool portalPlaced = false;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> valuesNM(0, NODE_MATRIX_SIZE-1);
+    uniform_int_distribution<> valuesN(0, NODE_SIZE-1);
+    
+    while(!portalPlaced) {
+        int rowS = valuesNM(gen);
+        int colS = valuesNM(gen);
+        BE_Node* targetNode = getNode(rowS, colS);
+
+        int rowForP = valuesN(gen);
+        int colForP = valuesN(gen);
+        if(targetNode->getMatrix()[rowForP][colForP]->getSymbol() == 'N') {
+            portal = new BE_CellPortal(rowForP, colForP, targetNode->getNodeID());
+            targetNode->getMatrix()[rowForP][colForP] = portal;
+            portalPlaced = true;
+        }
+    }
+    return portal;
+}
+
+vector<BE_PortalConnection*> BE_NodeMatrix::returnPortalConnections() {
+    vector<BE_PortalConnection*> portalsVector;
+    BE_PortalConnection* portalConnection = nullptr;
+    BE_CellPortal* portal1 = nullptr;
+    BE_CellPortal* portal2 = nullptr;
+    for (int i = 0; i < rowAmount; i++) {
+        for (int j = 0; j < colAmount; j++) {
+            portalConnection = nullptr;
+            portal1 = nullptr;
+            portal2 = nullptr;
+
+            portal1 = placeFirstPortal(i, j);
+            if(portal1 != nullptr) {
+                portal2 = generateRandomPortal();
+                pair<BE_CellPortal*, BE_CellPortal*> pair = make_pair(portal1, portal2);
+                portalConnection = new BE_PortalConnection(pair);
+                portalsVector.push_back(portalConnection);
+            }
+        }
+    }
+    return portalsVector;
+}
+
 BE_CellTreasure* BE_NodeMatrix::initializeTreasure() {
     BE_CellTreasure* treasure;
     bool treasurePlaced = false;
@@ -165,7 +229,33 @@ void BE_NodeMatrix::rcModifier(char direction, int& newRow, int& newCol, int& no
         }
 }
 
-void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) { // APPLY POWERS
+void BE_NodeMatrix::modifierForPortals(int& row, int& col, BE_Node* targetNode, vector<BE_PortalConnection*>& portalVector) {
+    int pvSize = portalVector.size();
+
+    for(int i = 0; i < pvSize; i++) {
+        int nodeRow;
+        int nodeCol;
+        BE_CellPortal* portal1 = portalVector[i]->getFirst();
+        BE_CellPortal* portal2 = portalVector[i]->getSecond();
+
+        if(row == portal1->getRow() && col == portal1->getCol() && targetNode->getNodeID() == portal1->getNodeValue()) {
+            row = portal2->getRow();
+            col = portal2->getCol();
+            getRowColFromNode(nodeRow, nodeCol, targetNode->getNodeID());
+            targetNode = getNode(nodeRow, nodeCol);
+            portalVector.erase(portalVector.begin() + i);
+        }
+        else if(row == portal2->getRow() && col == portal2->getCol() && targetNode->getNodeID() == portal2->getNodeValue()) {
+            row = portal1->getRow();
+            col = portal1->getCol();
+            getRowColFromNode(nodeRow, nodeCol, targetNode->getNodeID());
+            targetNode = getNode(nodeRow, nodeCol);
+            portalVector.erase(portalVector.begin() + i);
+        }
+    }
+}
+
+void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl, vector<BE_PortalConnection*>& portalVector) {
     if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
         getDoubleTurn = true;
     }
@@ -174,6 +264,9 @@ void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* 
     }
     else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
         cellPlayer->getPlayer()->getJumpWall();
+    }
+    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'P') {
+        modifierForPortals(newRow, newCol, targetNode, portalVector);
     }
 
     int oldRowN;
@@ -205,7 +298,7 @@ void BE_NodeMatrix::getValuesForJW(char direction, int& newRow, int& newCol, int
     }
 }
 
-bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) {
+bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl, vector<BE_PortalConnection*>& portalVector) {
     bool movePossible = false;
     int nodeRow;
     int nodeCol;
@@ -219,13 +312,13 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& get
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
         if(symbol != 'X' && symbol != '2' && symbol != '1') { // Checks if the position to access is NOT an unaccessible cell
-            movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl);
+            movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl, portalVector);
             movePossible = true;                      
         }
         else if (symbol == 'X' && cellPlayer->getPlayer()->getJumpWallAmount() > 0) {
             getValuesForJW(direction, newRow, newCol, nodeRow, nodeCol, targetNode);
             if(targetNode != nullptr) {
-                movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl);
+                movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl, portalVector);
                 movePossible = true;  
                 cellPlayer->getPlayer()->useJumpWall();
             }

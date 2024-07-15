@@ -10,6 +10,9 @@
 #include "UI_TitleScreen.h"
 #include "UI_Player.h"
 #include "UI_Treasure.h"
+
+#include <thread>
+#include <chrono>
 #include <iostream>
 using namespace std;
 
@@ -29,6 +32,11 @@ int main(int argc, char* argv[]) {
 
         if (!uiMain.initialize()) {
             cerr << "Failed to initialize UI_MAIN." << endl;
+            return -1;
+        }
+        if (!uiMain.checkIfMazeFits()) {
+            cerr << "The maze's size for the UI is bigger than the window generated." << endl;
+            this_thread::sleep_for(chrono::seconds(3));
             return -1;
         }
 
@@ -85,7 +93,7 @@ int main(int argc, char* argv[]) {
                     }
                 } 
                 
-                else if (currentGameState == MAIN_PROGRAM) {
+                else if (currentGameState == MAIN_PROGRAM) { // Manages which player makes the input, which player is moved and the use of Double Turn and Mind Control powers
                     bool moveCompleted = false;
                     while(!moveCompleted) {
                         if (playerInput == 1) {
