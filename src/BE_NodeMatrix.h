@@ -37,7 +37,7 @@ class BE_NodeMatrix {
         BE_Node* getNode(int rowSearch, int colSearch);
         void getRowColFromNode(int& row, int& col, int nodeNumber);
         void rcModifier(char direction, int& newRow, int& newCol, int& nodeRow, int& nodeCol);
-        void modifierForPortals(int& newRow, int& newCol, BE_Node* targetNode, vector<BE_PortalConnection*>& portalVector);
+        void modifierForPortals(int& newRow, int& newCol, BE_Node* targetNode, int& nodeRow, int& nodeCol, vector<BE_PortalConnection*>& portalVector);
         void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl, vector<BE_PortalConnection*>& portalVector);
         void getValuesForJW(char direction, int& newRow, int& newCol, int nodeRow, int nodeCol, BE_Node*& targetNode);
         bool tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl, vector<BE_PortalConnection*>& portalVector);

@@ -229,27 +229,23 @@ void BE_NodeMatrix::rcModifier(char direction, int& newRow, int& newCol, int& no
         }
 }
 
-void BE_NodeMatrix::modifierForPortals(int& row, int& col, BE_Node* targetNode, vector<BE_PortalConnection*>& portalVector) {
+void BE_NodeMatrix::modifierForPortals(int& newRow, int& newCol, BE_Node* targetNode, int& nodeRow, int& nodeCol, vector<BE_PortalConnection*>& portalVector) {
     int pvSize = portalVector.size();
 
     for(int i = 0; i < pvSize; i++) {
-        int nodeRow;
-        int nodeCol;
         BE_CellPortal* portal1 = portalVector[i]->getFirst();
         BE_CellPortal* portal2 = portalVector[i]->getSecond();
 
-        if(row == portal1->getRow() && col == portal1->getCol() && targetNode->getNodeID() == portal1->getNodeValue()) {
-            row = portal2->getRow();
-            col = portal2->getCol();
-            getRowColFromNode(nodeRow, nodeCol, targetNode->getNodeID());
-            targetNode = getNode(nodeRow, nodeCol);
+        if(newRow == portal1->getRow() && newCol == portal1->getCol() && targetNode->getNodeID() == portal1->getNodeValue()) {
+            newRow = portal2->getRow();
+            newCol = portal2->getCol();
+            getRowColFromNode(nodeRow, nodeCol, portal2->getNodeValue());
             portalVector.erase(portalVector.begin() + i);
         }
-        else if(row == portal2->getRow() && col == portal2->getCol() && targetNode->getNodeID() == portal2->getNodeValue()) {
-            row = portal1->getRow();
-            col = portal1->getCol();
-            getRowColFromNode(nodeRow, nodeCol, targetNode->getNodeID());
-            targetNode = getNode(nodeRow, nodeCol);
+        else if(newRow == portal2->getRow() && newCol == portal2->getCol() && targetNode->getNodeID() == portal2->getNodeValue()) {
+            newRow = portal1->getRow();
+            newCol = portal1->getCol();
+            getRowColFromNode(nodeRow, nodeCol, portal1->getNodeValue());
             portalVector.erase(portalVector.begin() + i);
         }
     }
@@ -266,7 +262,11 @@ void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* 
         cellPlayer->getPlayer()->getJumpWall();
     }
     else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'P') {
-        modifierForPortals(newRow, newCol, targetNode, portalVector);
+        int nodeRow;
+        int nodeCol;
+        targetNode->getMatrix()[newRow][newCol] = new BE_CellNormal();
+        modifierForPortals(newRow, newCol, targetNode, nodeRow, nodeCol, portalVector);
+        targetNode = getNode(nodeRow, nodeCol);
     }
 
     int oldRowN;
