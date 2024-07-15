@@ -36,6 +36,9 @@ int main(int argc, char* argv[]) {
         SDL_Renderer* renderer = uiMain.getRenderer();
         SDL_Event event;
         bool running = true;
+        bool getDoubleTurn = false;
+        bool getMindControl = false;
+        bool mindControlUsed = false;
         char direction = 'x'; 
         int playerInput = 1;
         int playerToMove = 1;
@@ -56,12 +59,18 @@ int main(int argc, char* argv[]) {
             // Renderer Section (renders the different GameStates)
             if (currentGameState == TITLE_SCREEN) {
                 uiTitleScreen.runTitleScreen(renderer);
-            } else if (currentGameState == MAIN_PROGRAM) {
+            } 
+            if (currentGameState == MAIN_PROGRAM) {
                 uiMain.runMainProgram(renderer, beTranslator.generateMatrixForUI(beMain.getNodeMatrix()->getMatrix()));
                 SDL_Delay(1000);
+
+                winnerPlayer = treasure->getWinnerPlayer(player1, player2);
+                if (winnerPlayer != 0) {
+                    currentGameState = WIN_SCREEN;
+                }
             }
-            else if (currentGameState == WIN_SCREEN) {
-                uiWinScreen.runWinScreen(renderer, 1);
+            if (currentGameState == WIN_SCREEN) {
+                uiWinScreen.runWinScreen(renderer, winnerPlayer);
             }
         
             // Event Handler Section (handles different events to switch between GameStates)
@@ -87,22 +96,36 @@ int main(int argc, char* argv[]) {
                         }
 
                         if(playerToMove == 1) {
-                            moveCompleted = beMain.movePlayer(player1, direction);
+                            moveCompleted = beMain.movePlayer(player1, direction, getDoubleTurn, getMindControl);
                         }
                         else if(playerToMove == 2) {
-                            moveCompleted = beMain.movePlayer(player1, direction);
+                            moveCompleted = beMain.movePlayer(player2, direction, getDoubleTurn, getMindControl);
                         }
                         direction = 'x';
                     }
-                    turnManager = beMain.turnChange(turnManager);   
-                    winnerPlayer = treasure->getWinnerPlayer(player1, player2);
-                    if (winnerPlayer != 0) {
-                        currentGameState = WIN_SCREEN;
+
+                    if (getDoubleTurn) {
+                        getDoubleTurn = false; 
+                    }
+                    else if(getMindControl) {
+                        turnManager = beMain.turnChange(turnManager);
+                        if (playerToMove == 1) {
+                            playerToMove = 2;
+                        }
+                        else {
+                            playerToMove = 1;
+                        }
+                        getMindControl = false;
+                    }
+                    else {
+                        turnManager = beMain.turnChange(turnManager);
+                        playerInput = turnManager;
+                        playerToMove = turnManager;  
                     }
                 }
 
                 else if (currentGameState == WIN_SCREEN) {
-                    SDL_Delay(5000);
+                    SDL_Delay(3000);
                     running = false;
                 }
             }
