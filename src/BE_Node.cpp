@@ -50,20 +50,6 @@ void BE_Node::placePowers() {
     }
 }
 
-void BE_Node::printMatrix() {
-    cout << "Printing matrix..." << endl;
-    for (int i = 0; i < rowAmount; i++) {
-        for (int j = 0; j < colAmount; j++) {
-            if (matrix[i][j] != nullptr) {
-                cout << matrix[i][j]->getSymbol() << ' ';
-            } else {
-                cout << "- ";
-            }
-        }
-        cout << endl;
-    }
-}
-
 vector<vector<BE_CellBase*>>& BE_Node::getMatrix() {
     return matrix;
 }

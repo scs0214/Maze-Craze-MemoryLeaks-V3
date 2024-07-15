@@ -76,7 +76,7 @@ BE_CellPortal* BE_NodeMatrix::generateRandomPortal() {
     return portal;
 }
 
-vector<BE_PortalConnection*> BE_NodeMatrix::returnPortalConnections() {
+vector<BE_PortalConnection*> BE_NodeMatrix::returnPortalConnections() { // Saves all the portals created and links them
     vector<BE_PortalConnection*> portalsVector;
     BE_PortalConnection* portalConnection = nullptr;
     BE_CellPortal* portal1 = nullptr;
@@ -230,6 +230,7 @@ void BE_NodeMatrix::rcModifier(char direction, int& newRow, int& newCol, int& no
 }
 
 void BE_NodeMatrix::modifierForPortals(int& newRow, int& newCol, BE_Node* targetNode, int& nodeRow, int& nodeCol, vector<BE_PortalConnection*>& portalVector) {
+    // Modifies values if a player enters a portal cell
     int pvSize = portalVector.size();
 
     for(int i = 0; i < pvSize; i++) {
@@ -252,7 +253,7 @@ void BE_NodeMatrix::modifierForPortals(int& newRow, int& newCol, BE_Node* target
 }
 
 void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl, vector<BE_PortalConnection*>& portalVector) {
-    if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
+    if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') { // Applies powers if needed
         getDoubleTurn = true;
     }
     else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
