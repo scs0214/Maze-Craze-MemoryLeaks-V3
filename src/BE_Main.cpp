@@ -2,6 +2,10 @@
 
 BE_Main::BE_Main(BE_NodeMatrix* nm) : nodeMatrix(nm), player1(nullptr), player2(nullptr) {}
 
+vector<BE_PortalConnection*>& BE_Main::getPortalVector() {
+    return portals;
+}
+
 BE_NodeMatrix* BE_Main::getNodeMatrix() {
     return nodeMatrix;
 }
@@ -34,10 +38,11 @@ void BE_Main::initializeNodeMatrix(BE_CellPlayer* p1, BE_CellPlayer* p2) {
     nodeMatrix->getMatrix()[maxVNM][maxVNM]->getMatrix()[maxVNP][maxVNP] = p2;
 
     nodeMatrix->placePowers();
+    portals = nodeMatrix->returnPortalConnections();
 }
 
 bool BE_Main::movePlayer(BE_CellPlayer* player, char direction, bool& getDoubleTurn, bool& getMindControl) {
-    return nodeMatrix->tryMove(direction, player, getDoubleTurn, getMindControl);
+    return nodeMatrix->tryMove(direction, player, getDoubleTurn, getMindControl, portals);
 }
 
 int BE_Main::turnChange(int lastTurn) {

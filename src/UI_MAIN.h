@@ -13,6 +13,7 @@ public:
     ~UI_MAIN();
     bool initialize();
     SDL_Renderer* getRenderer() const;
+    bool checkIfMazeFits();
     void runMainProgram(SDL_Renderer* renderer, vector<vector<int>> playerBoard);
 
 private:

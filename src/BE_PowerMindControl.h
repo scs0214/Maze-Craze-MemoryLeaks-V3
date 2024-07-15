@@ -7,7 +7,6 @@ using namespace std;
 class BE_PowerMindControl : public BE_Power {
     public:
         char getSymbol();
-        void immediateEffect();
 };
 
 #endif

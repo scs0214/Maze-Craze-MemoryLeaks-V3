@@ -7,7 +7,6 @@ using namespace std;
 class BE_PowerDoubleTurn : public BE_Power {
     public:
         char getSymbol();
-        void immediateEffect();
 };
 
 #endif

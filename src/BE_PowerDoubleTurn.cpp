@@ -3,6 +3,3 @@
 char BE_PowerDoubleTurn::getSymbol() {
     return 'D';
 }
-
-void BE_PowerDoubleTurn::immediateEffect() {
-}
