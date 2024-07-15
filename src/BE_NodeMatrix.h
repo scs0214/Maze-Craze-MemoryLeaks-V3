@@ -31,7 +31,8 @@ class BE_NodeMatrix {
         void addLinearEdges();
         BE_Node* getNode(int rowSearch, int colSearch);
         void getRowColFromNode(int& row, int& col, int nodeNumber);
-        void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer);
+        void movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl);
+        void getValuesForJW(char direction, int& newRow, int& newCol, int nodeRow, int nodeCol, BE_Node*& targetNode);
         bool tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl);
 };
 
