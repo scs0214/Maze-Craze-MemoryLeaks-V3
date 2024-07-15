@@ -134,7 +134,17 @@ void BE_NodeMatrix::getRowColFromNode(int& row, int& col, int nodeNumber) {
 }
 
 
-void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer) { // APPLY POWERS
+void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) { // APPLY POWERS
+    if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
+        getDoubleTurn = true;
+    }
+    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
+        getMindControl = true;
+    }
+    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
+        cellPlayer->getPlayer()->getJumpWall();
+    }
+
     int oldRowN;
     int oldColN;
     getRowColFromNode(oldRowN, oldColN, cellPlayer->getActualNode());
@@ -145,6 +155,52 @@ void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* 
     cellPlayer->setRow(newRow);
     cellPlayer->setCol(newCol);
     cellPlayer->setActualNode(targetNode->getNodeID()); // Moves cellPlayer and modifies its values.
+}
+
+void BE_NodeMatrix::getValuesForJW(char direction, int& newRow, int& newCol, int nodeRow, int nodeCol, BE_Node*& targetNode) {
+    bool stop = false;
+    while(!stop) {
+        if (direction == 'w') { // Up
+            newRow--;
+        }
+        else if (direction == 's') { // Down
+            newRow++;
+        }
+        else if (direction == 'a') { // Left
+            newCol--;
+        }
+        else if (direction == 'd') { // Right
+            newCol++;
+        }
+
+        if (newRow < 0) { // Modifies values if out of bounds
+            newRow = NODE_SIZE-1;
+            nodeRow--;
+        }
+        else if (newRow > NODE_SIZE-1) {
+            newRow = 0;
+            nodeRow++;
+        }
+        if (newCol < 0) {
+            newCol = NODE_SIZE-1;
+            nodeCol--;
+        }
+        else if (newCol > NODE_SIZE-1) {
+            newCol = 0;
+            nodeCol++;
+        }
+
+        targetNode = getNode(nodeRow, nodeCol);
+        if(targetNode == nullptr) {
+            stop = true;
+        }
+        else {
+            char symbolCheck = targetNode->getMatrix()[newRow][newCol]->getSymbol();
+            if(symbolCheck != 'X' && symbolCheck != '1' && symbolCheck != '2') {
+                stop = true;
+            }
+        }
+    }
 }
 
 bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) {
@@ -193,17 +249,16 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& get
     if(targetNode != nullptr) { // Checks if the node to access exists
         char symbol = targetNode->getMatrix()[newRow][newCol]->getSymbol();
         if(symbol != 'X' && symbol != '2' && symbol != '1') { // Checks if the position to access is NOT an unaccessible cell
-            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
-                getDoubleTurn = true;
-            }
-            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
-                getMindControl = true;
-            }
-            if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
-                cellPlayer->getPlayer()->getJumpWall();
-            }
-            movePlayer(direction, newRow, newCol, targetNode, cellPlayer);
+            movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl);
             movePossible = true;                      
+        }
+        else if (symbol == 'X' && cellPlayer->getPlayer()->getJumpWallAmount() > 0) {
+            getValuesForJW(direction, newRow, newCol, nodeRow, nodeCol, targetNode);
+            if(targetNode != nullptr) {
+                movePlayer(direction, newRow, newCol, targetNode, cellPlayer, getDoubleTurn, getMindControl);
+                movePossible = true;  
+                cellPlayer->getPlayer()->useJumpWall();
+            }
         }
     }
     return movePossible;
