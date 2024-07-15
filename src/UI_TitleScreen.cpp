@@ -14,8 +14,7 @@ void UI_TitleScreen::runTitleScreen(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, imageLoader.textures[0], nullptr, nullptr);
 
     SDL_Rect playButton = {posX, posY, buttonWidth, buttonHeight};
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderFillRect(renderer, &playButton);
+    SDL_RenderCopy(renderer, imageLoader.textures[12], nullptr, &playButton);
 
     SDL_RenderPresent(renderer);
 }

@@ -17,6 +17,9 @@ void UI_ImageLoader::generatePathsForVector() {
     imagePaths.push_back("ui files/TreasureCell.png"); // Position in vector: 9
     imagePaths.push_back("ui files/winscreen.png"); // Position in vector: 10
     imagePaths.push_back("ui files/mainprogrambg.png"); // Position in vector: 11
+    imagePaths.push_back("ui files/playButton.png"); // Position in vector: 12
+    imagePaths.push_back("ui files/player1Winner.png"); // Position in vector: 13
+    imagePaths.push_back("ui files/player2Winner.png"); // Position in vector: 14
 }
 
 bool UI_ImageLoader::loadImages(SDL_Renderer* renderer, const vector<string>& paths) {
