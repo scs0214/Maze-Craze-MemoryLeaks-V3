@@ -133,34 +133,8 @@ void BE_NodeMatrix::getRowColFromNode(int& row, int& col, int nodeNumber) {
     }
 }
 
-
-void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) { // APPLY POWERS
-    if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
-        getDoubleTurn = true;
-    }
-    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
-        getMindControl = true;
-    }
-    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
-        cellPlayer->getPlayer()->getJumpWall();
-    }
-
-    int oldRowN;
-    int oldColN;
-    getRowColFromNode(oldRowN, oldColN, cellPlayer->getActualNode());
-    BE_Node* oldNode = getNode(oldRowN, oldColN);
-
-    oldNode->getMatrix()[cellPlayer->getRow()][cellPlayer->getCol()] = new BE_CellNormal();
-    targetNode->getMatrix()[newRow][newCol] = cellPlayer;
-    cellPlayer->setRow(newRow);
-    cellPlayer->setCol(newCol);
-    cellPlayer->setActualNode(targetNode->getNodeID()); // Moves cellPlayer and modifies its values.
-}
-
-void BE_NodeMatrix::getValuesForJW(char direction, int& newRow, int& newCol, int nodeRow, int nodeCol, BE_Node*& targetNode) {
-    bool stop = false;
-    while(!stop) {
-        if (direction == 'w') { // Up
+void BE_NodeMatrix::rcModifier(char direction, int& newRow, int& newCol, int& nodeRow, int& nodeCol){
+    if (direction == 'w') { // Up
             newRow--;
         }
         else if (direction == 's') { // Down
@@ -189,7 +163,35 @@ void BE_NodeMatrix::getValuesForJW(char direction, int& newRow, int& newCol, int
             newCol = 0;
             nodeCol++;
         }
+}
 
+void BE_NodeMatrix::movePlayer(char direction, int newRow, int newCol, BE_Node* targetNode, BE_CellPlayer* cellPlayer, bool& getDoubleTurn, bool& getMindControl) { // APPLY POWERS
+    if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'D') {
+        getDoubleTurn = true;
+    }
+    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'M') {
+        getMindControl = true;
+    }
+    else if(targetNode->getMatrix()[newRow][newCol]->getSymbol() == 'J') {
+        cellPlayer->getPlayer()->getJumpWall();
+    }
+
+    int oldRowN;
+    int oldColN;
+    getRowColFromNode(oldRowN, oldColN, cellPlayer->getActualNode());
+    BE_Node* oldNode = getNode(oldRowN, oldColN);
+
+    oldNode->getMatrix()[cellPlayer->getRow()][cellPlayer->getCol()] = new BE_CellNormal();
+    targetNode->getMatrix()[newRow][newCol] = cellPlayer;
+    cellPlayer->setRow(newRow);
+    cellPlayer->setCol(newCol);
+    cellPlayer->setActualNode(targetNode->getNodeID()); // Moves cellPlayer and modifies its values.
+}
+
+void BE_NodeMatrix::getValuesForJW(char direction, int& newRow, int& newCol, int nodeRow, int nodeCol, BE_Node*& targetNode) {
+    bool stop = false;
+    while(!stop) {
+        rcModifier(direction, newRow, newCol, nodeRow, nodeCol);
         targetNode = getNode(nodeRow, nodeCol);
         if(targetNode == nullptr) {
             stop = true;
@@ -211,39 +213,7 @@ bool BE_NodeMatrix::tryMove(char direction, BE_CellPlayer* cellPlayer, bool& get
     int newCol = cellPlayer->getCol();
     int newNode = cellPlayer->getActualNode();
     getRowColFromNode(nodeRow, nodeCol, newNode);
-
-    if (direction == 'w') { // Up
-        newRow--;
-    }
-    else if (direction == 's') { // Down
-        newRow++;
-    }
-    else if (direction == 'a') { // Left
-        newCol--;
-    }
-    else if (direction == 'd') { // Right
-        newCol++;
-    }
-    else { // If the direction is not valid
-        return false;
-    }
-
-    if (newRow < 0) { // Modifies values if out of bounds
-        newRow = NODE_SIZE-1;
-        nodeRow--;
-    }
-    else if (newRow > NODE_SIZE-1) {
-        newRow = 0;
-        nodeRow++;
-    }
-    if (newCol < 0) {
-        newCol = NODE_SIZE-1;
-        nodeCol--;
-    }
-    else if (newCol > NODE_SIZE-1) {
-        newCol = 0;
-        nodeCol++;
-    }
+    rcModifier(direction, newRow, newCol, nodeRow, nodeCol);
 
     BE_Node* targetNode = getNode(nodeRow, nodeCol);
     if(targetNode != nullptr) { // Checks if the node to access exists
