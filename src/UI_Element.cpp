@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-void UI_Element::renderElement(SDL_Renderer* renderer, int row, int col, int num) { // Añadir 'int num' a los argumentos si existe una imagen para la celda
+void UI_Element::renderElement(SDL_Renderer* renderer, int row, int col, int num) { // 'num' represents the value of the image in the textures vector
     int sumX = (WINDOW_WIDTH - (NODE_MATRIX_SIZE*NODE_SIZE*CELL_SIZE)) / 2;
     int sumY = (WINDOW_HEIGHT - (NODE_MATRIX_SIZE*NODE_SIZE*CELL_SIZE)) / 2;;
     int positionX = sumX + (col * CELL_SIZE);

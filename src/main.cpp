@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
             cerr << "Failed to initialize UI_MAIN." << endl;
             return -1;
         }
-        if (!uiMain.checkIfMazeFits()) {
+        if (!uiMain.checkIfMazeFits()) { // Closes program if the maze doesn't fit in the window created
             cerr << "The maze's size for the UI is bigger than the window generated." << endl;
             this_thread::sleep_for(chrono::seconds(3));
             return -1;
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
                 uiWinScreen.runWinScreen(renderer, winnerPlayer);
             }
         
-            // Event Handler Section (handles different events to switch between GameStates)
+            // Event Handler Section (handles different events to switch between GameStates excepting WIN_SCREEN)
             while (SDL_PollEvent(&event) != 0) {
                 if (event.type == SDL_QUIT) {
                     running = false;

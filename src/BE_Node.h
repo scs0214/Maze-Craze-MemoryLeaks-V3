@@ -32,7 +32,6 @@ class BE_Node {
         ~BE_Node();
         void fillMatrix();
         void placePowers();
-        void printMatrix();
         vector<vector<BE_CellBase*>>& getMatrix();
         int getNodeID();
         BE_Node* getUp();
